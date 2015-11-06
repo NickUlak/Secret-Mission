@@ -1,9 +1,45 @@
-var myGame = {
-  config : {
+A3D.config = {
+  game:{
+    forceResolution : true,
+    targetRes : [640,480],
+    startScene : 'sampleLevel'
+  },
+  scenes : {
+    sampleLevel : {
+      rootUrl : './scenes/',
+      file : 'SecretMission.babylon',
+      onload : function(){
+
+         var patrol = {
+           speed: 0.04,
+           patrolPoints :[
+             {
+               gotoPoint:{x:2,y:0,z:-15},
+               lookTo:true
+             },
+             {
+               gotoPoint:{x:-7,y:0,z:-17},
+               lookTo:true
+             },
+             {
+               gotoPoint:{x:3,y:0,z:-9},
+               lookTo:true
+             },
+           ]
+         };
+      for(var e in A3D.ActiveGame.mainScene.Enemy){
+        var me = A3D.ActiveGame.mainScene.Enemy[e];
+        me.makePatrol(patrol);
+        me.startPatrol();
+      }
+      }
+    }
+  },
+
     playerSetup : {
       urlRoot : './models/',
-      file : 'chris.babylon',
-      importMeshName:'Chris',
+      file : 'Assassin.babylon',
+      importMeshName:'Assassin',
       boundsSize : {
         x : 0.2,
         y: 0.5,
@@ -22,18 +58,19 @@ var myGame = {
       animationsMap : [
         {
           name : 'idle',
-          start : 80,
-          end : 100
+          start : 1,
+          end : 10
         },
         {
           name : 'running',
-          start : 50,
-          end : 70
+          start : 1,
+          end : 80
         },
         {
           name : 'walking',
-          start : 10,
-          end : 40
+          start : 1,
+          end : 80,
+          
         }
       ],
       speedAnimationMap : [
@@ -45,12 +82,12 @@ var myGame = {
         {
           animation : 'walking',
           targetDistance : 0,
-          speed : 0.01
+          speed : 0.05
         },
         {
           animation : 'running',
           targetDistance : 1,
-          speed : 0.025
+          speed : 0.08
         }
       ]
     },
@@ -66,16 +103,16 @@ var myGame = {
         }
       ],
       scale : {
-        x: 0.3,
-        y:0.3,
-        z:0.3
+        x: 0.03,
+        y:0.03,
+        z:0.03
       }
     },
 
     cameraSetup : {
       offset: {
         x:0,
-        y: 6,
+        y:20,
         z: -3
       },
       rotation : {
@@ -84,21 +121,21 @@ var myGame = {
         z:0
       }
     }
-  },
-
-  scripts : function(s){
-    A3D.ActiveGame.run();
-    console.log('Start')
-  }
 };
 
 
 function start(){
-    new A3D.Game(myGame.config);
+    new A3D.Game();
+    A3D.ActiveGame.test = function (){
+      console.log('This is awesome')
+    }
+    A3D.ActiveGame.run();
+    /*
     A3D.ActiveGame._loadScene('./scenes/','SecretMission.babylon',function(){
       myGame.Adventure = new A3D.Module.Adventure(myGame.config);
       myGame.Adventure.loadModule(myGame.scripts);
     });
+    */
 }
 
 document.addEventListener( "DOMContentLoaded", start, false );
